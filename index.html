@@ -17,7 +17,7 @@
     const sameKey = 'f'
     const diffKey = 'j'
     const ITI = 500
-    const imgTime = 250
+    const imgTime = 200
     const fixTime = 500
     const maskTime = 500
 
@@ -35,13 +35,20 @@
     const jsPsych = initJsPsych({
         default_ITI: ITI,
         on_finish: function () {
-            let timestamp = new Date().toISOString()
-            jsPsych.data.get().localSave('csv', `${sbjID}_GreeblesMatching_${timestamp}.csv`)
+            jsPsych.data.get()
+                .filter({ test_trial: true })
+                .ignore('internal_node_id')
+                .ignore('stimulus')
+                .ignore('trial_type')
+                .ignore('trial_index')
+                .localSave('csv', `${sbjID}_GreeblesMatching_${timestamp}.csv`)
         }
     })
 
-    // Generate randomize subject ID
+    // Generate random subject ID and get start time
     const sbjID = jsPsych.randomization.randomID(5)
+    const timestamp = new Date().toISOString()
+    jsPsych.data.addProperties({ sbj_id: sbjID, start_time: timestamp })
 
     // Create same trial data
     let trials = []
@@ -51,7 +58,8 @@
             stimulus1: greebles[i],
             stimulus2: greebles[i],
             same: true,
-            noise: false
+            noise: false,
+            corr_res: sameKey
         })
 
         // Noisy trials
@@ -59,7 +67,8 @@
             stimulus1: greebles[i],
             stimulus2: greebles[i],
             same: true,
-            noise: true
+            noise: true,
+            corr_res: sameKey
         })
     }
 
@@ -75,7 +84,8 @@
                 stimulus1: stims[0],
                 stimulus2: stims[1],
                 same: false,
-                noise: false
+                noise: false,
+                corr_res: diffKey
             })
         }
         // Second half of the trials
@@ -84,7 +94,8 @@
                 stimulus1: stims[1],
                 stimulus2: stims[0],
                 same: false,
-                noise: true
+                noise: true,
+                corr_res: diffKey
             })
         }
 
@@ -117,7 +128,7 @@
     // Create fixation trial
     const fix = {
         type: jsPsychHtmlKeyboardResponse,
-        stimulus: '+',
+        stimulus: '<h1><b>+</b></h1>',
         choices: 'NO_KEYS',
         trial_duration: fixTime
     }
@@ -161,24 +172,39 @@
         timeline.push(mask)
 
         // Add second image
+        let respTrial
         if (trial.noise) {
             // Add noise
-            timeline.push({
+            respTrial = {
                 type: jsPsychImageKeyboardResponse,
                 stimulus: trial.stimulus2,
                 choices: [sameKey, diffKey]
-            })
+            }
         } else {
             // Add image with noise
-            timeline.push({
+            respTrial = {
                 type: jsPsychHtmlKeyboardResponse,
                 stimulus: `
                     <div style="position: absolute; margin-left: -200px; margin-top: -200px"><img src="${trial.stimulus2}"/></div>
                     <div style="position: absolute; margin-left: -200px; margin-top: -200px"><img src="${noiseImg}" style="opacity: .5"/></div>
                 `,
                 choices: [sameKey, diffKey]
-            })
+            }
         }
+
+        // Flag response trial with info
+        respTrial.data = {
+            test_trial: true,
+            stimulus1: trial.stimulus1,
+            stimulus2: trial.stimulus2,
+            same: trial.same,
+            noise: trial.noise,
+            corr_res: trial.corr_res
+        }
+        respTrial.on_finish = function (data) {
+            data.correct = data.corr_res == data.response
+        }
+        timeline.push(respTrial)
     }
 
     // Run the timeline
