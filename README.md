@@ -11,12 +11,13 @@ after a short exposure time, a visual mask is displayed, and then finally the
 second image is presented. The second image stays on the screen until a 
 response is made.
 
-## Default experiment setup:
+## Default experiment setup
 There are four objects that are pseudorandomly selected to create trials. Each
 object is used once in a "same" trial for each condition. The "different" 
 trials are created by randomly selecting two different objects. This results in 
 a total of 16 trials. 
 
+Default experiment parameters:
 * Fixation time: 500ms
 * First image time: 200ms
 * Mask time: 500ms
@@ -24,10 +25,14 @@ a total of 16 trials.
 * Same key: f
 * Different key: j
 
+Default parameters can be changed near the top of the experiment file. 
+Additional images can be added and will follow the same rules for generating
+trials.
+
 The experiment is created using jsPsych.
 
 ## Data dictionary
-The data dictionary for this experiment is as follows:
+The data csv file has the following columns:
 * rt: response time
 * response: which key did participant hit (default: f = same, j = different)
 * test_trial: a flag for the test trials, for internal filtering
