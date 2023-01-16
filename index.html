@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Greebles Matching</title>
+    <script src="https://unpkg.com/jspsych@7.2.1"></script>
+    <link href="https://unpkg.com/jspsych@7.2.1/css/jspsych.css" rel="stylesheet" type="text/css" />
+    <script src="https://unpkg.com/@jspsych/plugin-preload@1.1.0"></script>
+    <script src="https://unpkg.com/@jspsych/plugin-html-keyboard-response@1.1.0"></script>
+    <script src="https://unpkg.com/@jspsych/plugin-image-keyboard-response@1.0.0"></script>
+</head>
+
+<body></body>
+
+<script>
+    // Experiment parameters
+    const sameKey = 'g'
+    const diffKey = 'h'
+    const ITI = 500
+    const imgTime = 250
+    const fixTime = 500
+    const maskTime = 500
+
+    // Images
+    const noiseImg = './stimuli/noise.png'
+    const maskImg = './stimuli/mask.jpg'
+    const greebles = [
+        './stimuli/ng2-f-15-a.png',
+        './stimuli/ng2-f-26-a.png',
+        './stimuli/ng2-m-22-a.png',
+        './stimuli/ng2-m-33-a.png'
+    ]
+
+    // Initialize jsPsych
+    const jsPsych = initJsPsych({
+        default_ITI: ITI,
+        on_finish: function () {
+            let timestamp = new Date().toISOString()
+            jsPsych.data.get().localSave('csv', `${sbjID}_GreeblesMatching_${timestamp}.csv`)
+        }
+    })
+
+    // Generate randomize subject ID
+    const sbjID = jsPsych.randomization.randomID(5)
+
+    // Create same trial data
+    let trials = []
+    for (let i = 0; i < greebles.length; i++) {
+        // Clear trials
+        trials.push({
+            stimulus1: greebles[i],
+            stimulus2: greebles[i],
+            same: true,
+            noise: false
+        })
+
+        // Noisy trials
+        trials.push({
+            stimulus1: greebles[i],
+            stimulus2: greebles[i],
+            same: true,
+            noise: true
+        })
+    }
+
+    // Create different trial data
+    let stims
+    for (let i = 0; i < greebles.length * 2; i++) {
+        // Randomly select two images
+        stims = jsPsych.randomization.sampleWithoutReplacement(greebles, 2)
+
+        // First half of the trials
+        if (i < trials.length / 2) {
+            trials.push({
+                stimulus1: stims[0],
+                stimulus2: stims[1],
+                same: false,
+                noise: false
+            })
+        }
+        // Second half of the trials
+        else {
+            trials.push({
+                stimulus1: stims[1],
+                stimulus2: stims[0],
+                same: false,
+                noise: true
+            })
+        }
+
+    }
+
+    // Shuffle all trial data
+    trials = jsPsych.randomization.shuffle(trials)
+
+    // Timeline that holds each trial
+    let timeline = []
+
+    // Preload
+    timeline.push({
+        type: jsPsychPreload,
+        auto_preload: true
+    })
+
+    // Add instructions
+    timeline.push({
+        type: jsPsychHtmlKeyboardResponse,
+        stimulus: `
+            <p>You will be shown two objects with a scrambled image distractor in between.</p>
+            <p>You need to decide if the two objects are the same.</p>
+            <p>Press the <b>${sameKey}</b> key if the two images are the same, and the <b>${diffKey}</b> key if they are different.</p>
+            <p>Press space to begin!</p>
+        `,
+        choices: [' ']
+    })
+
+    // Create fixation trial
+    const fix = {
+        type: jsPsychHtmlKeyboardResponse,
+        stimulus: '+',
+        choices: 'NO_KEYS',
+        trial_duration: fixTime
+    }
+
+    // Create mask
+    const mask = {
+        type: jsPsychImageKeyboardResponse,
+        stimulus: maskImg,
+        choices: 'NO_KEYS',
+        trial_duration: maskTime
+    }
+
+    // Add trials
+    for (trial of trials) {
+        // Add fixation cross
+        timeline.push(fix)
+
+        // Add images without noise
+        if (trial.noise) {
+            // Add original images
+            timeline.push({
+                type: jsPsychImageKeyboardResponse,
+                stimulus: trial.stimulus1,
+                choices: 'NO_KEYS',
+                trial_duration: imgTime
+            })
+        } else {
+            // Add image with noise
+            timeline.push({
+                type: jsPsychHtmlKeyboardResponse,
+                stimulus: `
+                    <div style="position: absolute; margin-left: -200px; margin-top: -200px"><img src="${trial.stimulus1}"/></div>
+                    <div style="position: absolute; margin-left: -200px; margin-top: -200px"><img src="${noiseImg}" style="opacity: .5"/></div>
+                `,
+                choices: 'NO_KEYS',
+                trial_duration: imgTime
+            })
+        }
+
+        // Add mask
+        timeline.push(mask)
+
+        // Add second image
+        if (trial.noise) {
+            // Add noise
+            timeline.push({
+                type: jsPsychImageKeyboardResponse,
+                stimulus: trial.stimulus2,
+                choices: [sameKey, diffKey]
+            })
+        } else {
+            // Add image with noise
+            timeline.push({
+                type: jsPsychHtmlKeyboardResponse,
+                stimulus: `
+                    <div style="position: absolute; margin-left: -200px; margin-top: -200px"><img src="${trial.stimulus2}"/></div>
+                    <div style="position: absolute; margin-left: -200px; margin-top: -200px"><img src="${noiseImg}" style="opacity: .5"/></div>
+                `,
+                choices: [sameKey, diffKey]
+            })
+        }
+    }
+
+    // Run the timeline
+    jsPsych.run(timeline)
+</script>
