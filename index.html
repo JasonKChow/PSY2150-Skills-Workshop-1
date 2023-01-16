@@ -35,6 +35,7 @@
     const jsPsych = initJsPsych({
         default_ITI: ITI,
         on_finish: function () {
+            // Saves the relevant data to csv
             jsPsych.data.get()
                 .filter({ test_trial: true })
                 .ignore('internal_node_id')
@@ -130,7 +131,8 @@
         type: jsPsychHtmlKeyboardResponse,
         stimulus: '<h1><b>+</b></h1>',
         choices: 'NO_KEYS',
-        trial_duration: fixTime
+        trial_duration: fixTime,
+        post_trial_gap: 0
     }
 
     // Create mask
@@ -138,7 +140,8 @@
         type: jsPsychImageKeyboardResponse,
         stimulus: maskImg,
         choices: 'NO_KEYS',
-        trial_duration: maskTime
+        trial_duration: maskTime,
+        post_trial_gap: 0
     }
 
     // Add trials
@@ -153,7 +156,8 @@
                 type: jsPsychImageKeyboardResponse,
                 stimulus: trial.stimulus1,
                 choices: 'NO_KEYS',
-                trial_duration: imgTime
+                trial_duration: imgTime,
+                post_trial_gap: 0
             })
         } else {
             // Add image with noise
@@ -164,7 +168,8 @@
                     <div style="position: absolute; margin-left: -200px; margin-top: -200px"><img src="${noiseImg}" style="opacity: .5"/></div>
                 `,
                 choices: 'NO_KEYS',
-                trial_duration: imgTime
+                trial_duration: imgTime,
+                post_trial_gap: 0
             })
         }
 
