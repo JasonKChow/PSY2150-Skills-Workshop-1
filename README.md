@@ -47,3 +47,4 @@ The data csv file has the following columns:
 * sbj_id: randomly generated subject_id
 * start_time: date/time that the experiment started
 * correct: was the response correct
+* seed: random seed used for randomization

@@ -46,10 +46,11 @@
         }
     })
 
-    // Generate random subject ID and get start time
+    // Generate random subject ID + seed, and get start time
     const sbjID = jsPsych.randomization.randomID(5)
+    const seed = jsPsych.randomization.setSeed()
     const timestamp = new Date().toISOString()
-    jsPsych.data.addProperties({ sbj_id: sbjID, start_time: timestamp })
+    jsPsych.data.addProperties({ sbj_id: sbjID, start_time: timestamp, seed: seed })
 
     // Create same trial data
     let trials = []
