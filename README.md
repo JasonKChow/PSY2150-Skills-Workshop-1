@@ -11,6 +11,8 @@ after a short exposure time, a visual mask is displayed, and then finally the
 second image is presented. The second image stays on the screen until a 
 response is made.
 
+The experiment is hosted here: https://jasonkchow.github.io/PSY2150-Skills-Workshop-1/experiment.html
+
 ## Default experiment setup
 There are four objects that are pseudorandomly selected to create trials. Each
 object is used once in a "same" trial for each condition. The "different" 
