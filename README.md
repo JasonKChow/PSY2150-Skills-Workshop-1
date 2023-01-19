@@ -21,7 +21,7 @@ CLICK HERE TO RUN THE EXPERIMENT FOR YOURSELF:
 https://jasonkchow.github.io/PSY2150-Skills-Workshop-1/experiment.html
 
 It will start you off with some brief instructions about what keys to press.
-Then you can come back here to see some other details about the experiment, below.
+Once you are done you can come back here to see some other details about the experiment, below.
 
 Note that this experiment has some intentionally rough edges! 
 Part of the group assignment is to give us "notes" on how the experiment could be improved.
