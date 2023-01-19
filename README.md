@@ -1,21 +1,25 @@
 # PSY2150-Skills-Workshop-1
-This is a simple and short memory experiment called a same/different task. 
+
+## Overview
+
+* This is a simple and short memory experiment called a same/different task. 
 On each trial, you'll see an object (a green figure called a Greeble), then you'll see a scrambled picture, 
 then you'll see a second object. Your job is to decide whether the first object and the second object 
 are the same or different!
-The whole experiment only lasts a minute or so, and each trial is very fast paced, so be ready!
-Your performance on the task doesn't matter at all. 
-You can run it multiple times. You can enter wrong answers on purpose. 
-You can see what happens if you do something unexpected.
-Once you finish each "session" (which is 16 trials), a file will be downloaded to your computer, 
-to your Downloads folder. That is your "session log". It will have a record of the presented items, 
-and your key press responses. This file is called a CSV (for comma separated values), and it is a common way of formatting data, 
-because it is very simple. You can open the CSV file in Excel, or Google Sheets, or even a text editor.
-
-The experiment has two conditions: One is "noise", where visual static is added to the object. The other is 
+* The experiment has two conditions: One is "noise", where visual static is added to the object. The other is 
 "no noise" where the objects are presented in the clear, without static.
+* The whole experiment only lasts a minute or so, and each trial is very fast paced, so be ready!
+* Your performance on the task doesn't matter at all. You can run it multiple times. You can enter wrong answers on purpose. 
+You can see what happens if you do something unexpected.
+* Once you finish each "session" (which is 16 trials), a file will be downloaded to your computer, 
+to your Downloads folder. 
+* This file is your "session log". It stores information about what happened during your "session". This file is called a CSV file (for comma separated values), and it is a common way of formatting data, because it is very simple. 
+* You can open the CSV file in Excel, or Google Sheets, or even a text editor.
 
-CLICK HERE TO RUN THE EXPERIMENT FOR YOURSELF: https://jasonkchow.github.io/PSY2150-Skills-Workshop-1/experiment.html
+CLICK HERE TO RUN THE EXPERIMENT FOR YOURSELF: 
+
+https://jasonkchow.github.io/PSY2150-Skills-Workshop-1/experiment.html
+
 It will start you off with some brief instructions about what keys to press.
 Then you can come back here to see some other details about the experiment, below.
 
@@ -28,6 +32,7 @@ Part of the group assignment is to give us "notes" on how the experiment could b
 * Present first image (the "study item")
 * Present visual mask
 * Present second image (the "probe") until keypress is made
+* Wait a bit and then loop back up to the top until all trials are presented
 
 ## Materials and procedure
 
@@ -43,7 +48,7 @@ Default experiment parameters:
 * Same key: f
 * Different key: j
 
-Default parameters are defined near the top of the experiment file. Changing their values will change the experiment. However, this will not change the experiment hosted at the link above. Jason would have to update it after making changes to those parameters, to have them take effect. 
+Default parameters are defined near the top of the experiment file. Changing their values will change the experiment. However, this will not change the experiment hosted at the link above. (it is running on a server and Jason would have to update it for any changes to have an effect) 
 
 If additional images are added to the stimuli folder, the experiment code will use them to make more trials. 
 
